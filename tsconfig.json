@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "outDir": "./public/",
     "sourceMap": true,
+    "lib": ["es6", "dom"],
     "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "module": "es6",
     "target": "es5",
     "jsx": "react",
