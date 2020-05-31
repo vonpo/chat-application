@@ -6,14 +6,14 @@ interface ChatMessageProps {
   text: string;
 }
 
-const ChatMessage: FunctionComponent<ChatMessageProps> = ({ text }) => {
-  return <div>{text}</div>;
+const ChatMessage: FunctionComponent<ChatMessageProps> = ({ text, id }) => {
+  return <div key={id}>{text}</div>;
 };
 
 const chatMessages: ChatMessageProps[] = Array.from(Array(200).keys()).map(
   (e, index) => ({
     text: "asdas" + index,
-    id: "test",
+    id: "test" + index,
   })
 );
 
