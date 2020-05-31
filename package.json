@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "test": "jest",
     "start": "webpack-dev-server --open",
     "watch": "webpack --watch --config webpack.config.js",
     "build": "webpack --config webpack.config.js"
@@ -21,23 +22,55 @@
     "url": "https://github.com/vonpo/chat-application/issues"
   },
   "homepage": "https://github.com/vonpo/chat-application#readme",
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ]
+  },
+  "jest": {
+    "testRegex": "((\\.|/*.)(spec))\\.js?$",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/jest.setup.js",
+      "jest-enzyme"
+    ],
+    "testEnvironment": "enzyme"
+  },
   "dependencies": {
     "@material-ui/core": "^4.10.0",
-    "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "@babel/preset-typescript": "^7.10.1",
     "@types/html-webpack-plugin": "^3.2.3",
     "@types/lodash": "^4.14.153",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/webpack": "^4.41.13",
+    "@types/react-router-dom": "^5.1.5",
+    "babel-jest": "^26.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.0.1",
+    "jest-environment-enzyme": "^7.1.2",
+    "jest-enzyme": "^7.1.2",
     "less-loader": "^6.1.0",
     "prettier": "^2.0.5",
     "source-map-loader": "^1.0.0",
