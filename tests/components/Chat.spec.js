@@ -1,16 +1,18 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { Chat, ChatMessage } from "../../src/components/chat";
+import { ChatMessages, Chat, AddChatMessage } from "../../src/components/chat";
+import { beforeEach, describe, expect } from "@jest/globals";
 
 describe("<Chat/> spec", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<Chat loadMessages={() => []} />);
+    wrapper = shallow(<Chat />);
   });
 
-  test("Should get messages", () => {
+  test("should display: header, chat messages and add chat messaged button", () => {
     expect(wrapper.find("h1")).toHaveLength(1);
-    expect(wrapper.find(ChatMessage)).toHaveProp("id", "marcin");
+    expect(wrapper.find(ChatMessages)).toHaveLength(1);
+    expect(wrapper.find(AddChatMessage)).toHaveLength(1);
   });
 });

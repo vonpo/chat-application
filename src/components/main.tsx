@@ -13,8 +13,11 @@ import { Chat } from "./chat";
 import { Settings } from "./settings";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { darkTheme, whiteTheme } from "../theme";
-import { useGlobalState } from "../store/useGlobalState";
-import { AppState } from "../store/AppState";
+
+import { SettingsContext } from "../store/settings";
+import { ChatContext, useChat } from "../store/chat/chatContext";
+import { useSettings } from "../store/settings";
+
 /**
  * App component consists of main elements of app:
  *
@@ -27,25 +30,33 @@ import { AppState } from "../store/AppState";
  * @constructor
  */
 export const AppComponent: FunctionComponent = () => {
+  const settingsContext = useSettings();
+  const chatContext = useChat();
+
   return (
-    <AppState.Provider value={useGlobalState()}>
-      <AppState.Consumer>
-        {({ state }) => (
-          <ThemeProvider theme={state.isDark ? darkTheme : whiteTheme}>
-            <BrowserRouter>
-              <Grid direction="column" container className="main-container">
-                <CssBaseline />
-                <Header />
-                <PageView>
-                  <Route component={Chat} path="/" exact />
-                  <Route component={Settings} path="/settings" />
-                </PageView>
-                <Footer />
-              </Grid>
-            </BrowserRouter>
-          </ThemeProvider>
-        )}
-      </AppState.Consumer>
-    </AppState.Provider>
+    <SettingsContext.Provider value={settingsContext}>
+      <SettingsContext.Consumer>
+        {({ state }) => {
+          console.info(state, "main");
+          return (
+            <ThemeProvider theme={state.isDark ? darkTheme : whiteTheme}>
+              <BrowserRouter>
+                <Grid direction="column" container className="main-container">
+                  <ChatContext.Provider value={chatContext}>
+                    <CssBaseline />
+                    <Header />
+                    <PageView>
+                      <Route component={Chat} path="/" exact />
+                      <Route component={Settings} path="/settings" />
+                    </PageView>
+                    <Footer />
+                  </ChatContext.Provider>
+                </Grid>
+              </BrowserRouter>
+            </ThemeProvider>
+          );
+        }}
+      </SettingsContext.Consumer>
+    </SettingsContext.Provider>
   );
 };
