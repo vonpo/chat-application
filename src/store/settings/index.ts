@@ -3,6 +3,7 @@ import { Actions } from "./actions";
 import * as React from "react";
 import { useReducer } from "react";
 import defaultLanguage from "../../i18n/defaultLanguage";
+import { setItem, getItem } from "../../storage/local";
 
 export interface SettingState {
   isDark: boolean;
@@ -18,7 +19,7 @@ const getDefaultSettings = () => ({
   sendOnCtrlEnter: true,
   userName: "",
 });
-const localSettingsRaw = window.localStorage.getItem("user");
+const localSettingsRaw = getItem("settings");
 const localSettings = localSettingsRaw && JSON.parse(localSettingsRaw);
 export const initialState = localSettings || getDefaultSettings();
 
@@ -47,7 +48,7 @@ const localStorage = (state: SettingState, action: Actions) => {
   const newState = reducer(state, action);
 
   if (state !== newState) {
-    window.localStorage.setItem("user", JSON.stringify(newState));
+    setItem("settings", JSON.stringify(newState));
   }
 
   return newState;

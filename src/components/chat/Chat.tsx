@@ -19,7 +19,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
 import { useUser } from "../../store/user/userContext";
-interface ChatProps {}
 
 /**
  * Display chat message.
@@ -27,6 +26,7 @@ interface ChatProps {}
  * @param {string} author
  * @param {string} text
  * @param {string} id
+ * @param {string} userId
  * @param {number} date
  * @constructor
  */
@@ -160,7 +160,7 @@ export const ChatMessages: FunctionComponent = ({}) => {
  *
  * @constructor
  */
-export const Chat: FunctionComponent<ChatProps> = ({}) => {
+export const Chat: FunctionComponent = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const {
     state: { messages },
