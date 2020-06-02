@@ -5,3 +5,9 @@ export interface ChatMessage {
   date: number;
   userId: string;
 }
+
+export interface ChatMessageInput {
+  userId: string;
+  text: string;
+  author: string;
+}

@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { SettingsContext } from "settingsStore";
+import { SettingsContext, useSettingsContext } from "settingsStore";
 import { useChatContext } from "../../store/chat/chatContext";
 import { format } from "date-fns";
 import { ChatMessage as ChatMessageProps } from "../../store/chat/ChatMessage";
@@ -82,8 +82,8 @@ export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
  */
 export const AddChatMessage: FunctionComponent = ({}) => {
   const { id } = useUser();
-  const { state } = useContext(SettingsContext);
-  const { dispatch } = useChatContext();
+  const { state } = useSettingsContext();
+  const { sendMessage } = useChatContext();
   const [message, setMessage] = useState("");
 
   const onTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,16 +95,21 @@ export const AddChatMessage: FunctionComponent = ({}) => {
       return;
     }
 
-    dispatch({
-      type: "AddChatMessage",
-      value: {
-        userId: id,
-        author: state.userName,
-        date: Date.now(),
-        id: Date.now().toString(),
-        text: message,
-      },
+    sendMessage({
+      userId: id,
+      author: state.userName,
+      text: message,
     });
+    // dispatch({
+    //   type: "AddChatMessage",
+    //   value: {
+    //     userId: id,
+    //     author: state.userName,
+    //     date: Date.now(),
+    //     id: Date.now().toString(),
+    //     text: message,
+    //   },
+    // });
     setMessage("");
   };
 

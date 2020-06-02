@@ -14,9 +14,8 @@ import { Settings } from "./settings";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { darkTheme, whiteTheme } from "../theme";
 
-import { SettingsContext } from "../store/settings";
+import { SettingsContext, useSettings } from "settingsStore";
 import { ChatContext, useChat } from "../store/chat/chatContext";
-import { useSettings } from "../store/settings";
 import i18n from "i18next";
 import Styles from "./main.module.less";
 

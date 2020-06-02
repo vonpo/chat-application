@@ -1,6 +1,6 @@
 import * as React from "react";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
-import { SettingsContext } from "settingsStore";
+import { FunctionComponent, useEffect, useState } from "react";
+import { useSettingsContext } from "settingsStore";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -9,7 +9,6 @@ import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Styles from "./settings.module.less";
@@ -17,7 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 export const ResetSettings: FunctionComponent = () => {
-  const { dispatch } = useContext(SettingsContext);
+  const { dispatch } = useSettingsContext();
   const onReset = () => dispatch({ type: "ResetSettings" });
 
   return <Button onClick={onReset}>Reset</Button>;
@@ -25,7 +24,7 @@ export const ResetSettings: FunctionComponent = () => {
 
 export const Settings: FunctionComponent = () => {
   const { t } = useTranslation();
-  const { state, dispatch } = useContext(SettingsContext);
+  const { state, dispatch } = useSettingsContext();
   const [userName, setUsername] = useState(state.userName);
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export const Settings: FunctionComponent = () => {
   ) => {
     const actionType =
       event.target.value === "light" ? "SetWhiteTheme" : "SetDarkTheme";
-    console.info("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     dispatch({ type: actionType });
   };
 

@@ -1,4 +1,4 @@
-import { createContext, Dispatch } from "react";
+import { createContext, Dispatch, useContext } from "react";
 import { Actions } from "./actions";
 import * as React from "react";
 import { useReducer } from "react";
@@ -70,3 +70,5 @@ export const SettingsContext = createContext<{
   state: initialState,
   dispatch: () => null,
 });
+
+export const useSettingsContext = () => useContext(SettingsContext);
