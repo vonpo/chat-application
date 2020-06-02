@@ -17,6 +17,9 @@ module.exports = {
     path: path.resolve(__dirname, "public"),
   },
   resolve: {
+    alias: {
+      settingsStore: path.resolve(__dirname, "src/store/settings"),
+    },
     extensions: [".tsx", ".ts", ".js", ".css", ".less"],
   },
   plugins: [
@@ -44,8 +47,19 @@ module.exports = {
         loader: "source-map-loader",
       },
       {
-        test: /\.(less|css)$/,
-        use: ["style-loader", "css-loader", "less-loader"],
+        test: /\.((c|le)ss)$/i,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          {
+            loader: "less-loader",
+          },
+        ],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,

@@ -37,6 +37,11 @@
     ]
   },
   "jest": {
+    "moduleNameMapper": {
+      "settingsStore": "<rootDir>/tests/__mocks__/settingStore.js",
+      "react-i18next": "<rootDir>/tests/__mocks__/i18n.js",
+      "\\.(css|less|sass|scss)$": "<rootDir>/tests/__mocks__/styleMock.js"
+    },
     "testRegex": "((\\.|/*.)(spec))\\.js?$",
     "setupFilesAfterEnv": [
       "<rootDir>/tests/jest.setup.js",
@@ -46,9 +51,11 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.10.0",
+    "babel-plugin-react-css-modules": "^5.2.6",
     "date-fns": "^2.14.0",
     "i18next": "^19.4.5",
     "react": "^16.13.1",
+    "react-css-modules": "^4.7.11",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.5.0",
     "react-router-dom": "^5.2.0"

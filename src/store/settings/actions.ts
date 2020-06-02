@@ -1,5 +1,3 @@
-import { ChatMessage } from "../interfaces/ChatMessage";
-
 type SetDarkTheme = {
   readonly type: "SetDarkTheme";
 };
@@ -13,18 +11,30 @@ type ChaneLanguage = {
   readonly value: string;
 };
 
+type ChangeSendType = {
+  readonly type: "ChangeSendType";
+  readonly value: boolean;
+};
+
 type ChangeDateFormat = {
   readonly type: "ChangeDateFormat";
   readonly value: string;
 };
 
-type AddChatMessage = {
-  readonly type: "AddChatMessage";
-  readonly value: ChatMessage;
+type SetUser = {
+  readonly type: "SetUser";
+  readonly value: string;
 };
+
+type ResetSettings = {
+  readonly type: "ResetSettings";
+};
+
 export type Actions =
   | SetDarkTheme
   | SetWhiteTheme
   | ChaneLanguage
   | ChangeDateFormat
-  | AddChatMessage;
+  | ChangeSendType
+  | SetUser
+  | ResetSettings;

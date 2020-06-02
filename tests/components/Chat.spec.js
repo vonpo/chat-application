@@ -11,8 +11,6 @@ describe("<Chat/> spec", () => {
   });
 
   test("should display: header, chat messages and add chat messaged button", () => {
-    expect(wrapper.find("h1")).toHaveLength(1);
     expect(wrapper.find(ChatMessages)).toHaveLength(1);
-    expect(wrapper.find(AddChatMessage)).toHaveLength(1);
   });
 });

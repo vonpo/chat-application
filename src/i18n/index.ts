@@ -1,8 +1,29 @@
-import i18n from "i18next";
+import i18n, { LanguageDetectorModule } from "i18next";
 import { initReactI18next } from "react-i18next";
+import defaultLanguage from "./defaultLanguage";
+
+/**
+ * First try to get language from user storage if it fails return default language from browser settings.
+ * This it not needed but save one render cycle as we don't need to re-render when we have correct language set.
+ */
+const customLanguageDetector: LanguageDetectorModule = {
+  type: "languageDetector",
+  init: () => {},
+  detect: () => {
+    const userRaw = localStorage.getItem("user");
+
+    if (userRaw) {
+      return JSON.parse(userRaw).language;
+    }
+
+    return defaultLanguage;
+  },
+  cacheUserLanguage: () => {},
+};
 
 i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next)
+  .use(customLanguageDetector)
   .init({
     resources: {
       en: {
@@ -18,6 +39,12 @@ i18n
           settingDateFormat: "Clock Display",
           settingDateFormat12H: "12 Hours",
           settingDateFormat24H: "24 Hours",
+          settingSend: "Send messages on CTRL+ENTER",
+          settingSendCtrlEnterOn: "On",
+          settingSendCtrlEnterOff: "Off",
+          settingInterfaceColor: "Interface color",
+          settingInterfaceColorLight: "Light",
+          settingInterfaceColorDark: "Dark",
         },
       },
       de: {
@@ -33,6 +60,12 @@ i18n
           settingDateFormat: "DE: Clock Display",
           settingDateFormat12H: "DE: 12 Hours",
           settingDateFormat24H: "DE: 24 Hours",
+          settingSend: "DE: Send messages on CTRL+ENTER",
+          settingSendCtrlEnterOn: "DE: On",
+          settingSendCtrlEnterOff: "DE: Off",
+          settingInterfaceColor: "DE: Interface color",
+          settingInterfaceColorLight: "DE: Light",
+          settingInterfaceColorDark: "DE: Dark",
         },
       },
       pl: {
@@ -48,17 +81,17 @@ i18n
           settingDateFormat: "Format daty",
           settingDateFormat12H: "12 godzinny",
           settingDateFormat24H: "24 godzinny",
+          settingSend: "Wyślij po naciśnięciu CTRL+ENTER",
+          settingSendCtrlEnterOn: "Tak",
+          settingSendCtrlEnterOff: "Nie",
+          settingInterfaceColor: "Kolor interfejsu",
+          settingInterfaceColorLight: "Jasny",
+          settingInterfaceColorDark: "Ciemny",
         },
       },
     },
-    lng: "pl",
-    fallbackLng: "pl",
+    fallbackLng: defaultLanguage,
     interpolation: {
       escapeValue: false,
     },
-    react: {
-      bindI18n: false,
-    },
   });
-
-export default i18n;

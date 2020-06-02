@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "settingsStore": ["src/store/settings"]
+    },
     "moduleResolution": "node",
     "outDir": "./public/",
     "sourceMap": true,

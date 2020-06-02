@@ -1,6 +1,6 @@
 import * as React from "react";
-import { FunctionComponent } from "react";
-
+import { FunctionComponent, useEffect } from "react";
+import { StylesProvider } from "@material-ui/core/styles";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
@@ -17,6 +17,8 @@ import { darkTheme, whiteTheme } from "../theme";
 import { SettingsContext } from "../store/settings";
 import { ChatContext, useChat } from "../store/chat/chatContext";
 import { useSettings } from "../store/settings";
+import i18n from "i18next";
+import Styles from "./main.module.less";
 
 /**
  * App component consists of main elements of app:
@@ -33,30 +35,49 @@ export const AppComponent: FunctionComponent = () => {
   const settingsContext = useSettings();
   const chatContext = useChat();
 
+  useEffect(() => {
+    if (settingsContext.state.language !== i18n.language) {
+      i18n.changeLanguage(settingsContext.state.language);
+    }
+  }, []);
+
   return (
-    <SettingsContext.Provider value={settingsContext}>
-      <SettingsContext.Consumer>
-        {({ state }) => {
-          console.info(state, "main");
-          return (
-            <ThemeProvider theme={state.isDark ? darkTheme : whiteTheme}>
-              <BrowserRouter>
-                <Grid direction="column" container className="main-container">
-                  <ChatContext.Provider value={chatContext}>
-                    <CssBaseline />
-                    <Header />
-                    <PageView>
-                      <Route component={Chat} path="/" exact />
-                      <Route component={Settings} path="/settings" />
-                    </PageView>
-                    <Footer />
-                  </ChatContext.Provider>
-                </Grid>
-              </BrowserRouter>
-            </ThemeProvider>
-          );
-        }}
-      </SettingsContext.Consumer>
-    </SettingsContext.Provider>
+    <StylesProvider injectFirst>
+      <SettingsContext.Provider value={settingsContext}>
+        <SettingsContext.Consumer>
+          {({ state }) => {
+            return (
+              <ThemeProvider theme={state.isDark ? darkTheme : whiteTheme}>
+                <BrowserRouter>
+                  <Grid
+                    justify="center"
+                    container
+                    className={
+                      state.isDark ? Styles.darkTheme : Styles.whiteTheme
+                    }
+                  >
+                    <Grid
+                      direction="column"
+                      container
+                      className={Styles.mainContainer}
+                    >
+                      <ChatContext.Provider value={chatContext}>
+                        <CssBaseline />
+                        <Header />
+                        <PageView>
+                          <Route component={Chat} path="/" exact />
+                          <Route component={Settings} path="/settings" />
+                        </PageView>
+                        <Footer />
+                      </ChatContext.Provider>
+                    </Grid>
+                  </Grid>
+                </BrowserRouter>
+              </ThemeProvider>
+            );
+          }}
+        </SettingsContext.Consumer>
+      </SettingsContext.Provider>
+    </StylesProvider>
   );
 };

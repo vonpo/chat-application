@@ -5,17 +5,16 @@ import {
   Reducer,
   Dispatch,
   useContext,
+  useEffect,
 } from "react";
-import {
-  ChatMessage as ChatMessageProps,
-  ChatMessage,
-} from "../interfaces/ChatMessage";
+import { ChatMessage as ChatMessageProps, ChatMessage } from "./ChatMessage";
 
-export interface Settings {
+export interface Chat {
   messages: ChatMessage[];
+  unreadMessages: ChatMessage[];
 }
 
-const mockMessages: ChatMessageProps[] = Array.from(Array(15).keys()).map(
+const mockMessages: ChatMessageProps[] = Array.from(Array(3).keys()).map(
   (e, index) => ({
     text: "asdas" + index,
     id: "test" + index,
@@ -24,8 +23,14 @@ const mockMessages: ChatMessageProps[] = Array.from(Array(15).keys()).map(
   })
 );
 
-const initialState: Settings = {
+const initialState: Chat = {
   messages: mockMessages,
+  unreadMessages: [],
+};
+
+type AddUnreadChatMessage = {
+  readonly type: "AddUnreadChatMessage";
+  readonly value: ChatMessage;
 };
 
 type AddChatMessage = {
@@ -33,10 +38,14 @@ type AddChatMessage = {
   readonly value: ChatMessage;
 };
 
-type Actions = AddChatMessage;
+type ReadAllMessages = {
+  readonly type: "ReadAllMessages";
+};
+
+type Actions = AddChatMessage | ReadAllMessages | AddUnreadChatMessage;
 
 export const ChatContext = createContext<{
-  state: Settings;
+  state: Chat;
   dispatch: Dispatch<Actions>;
 }>({
   state: initialState,
@@ -44,9 +53,28 @@ export const ChatContext = createContext<{
 });
 
 export const useChatContext = () => useContext(ChatContext);
+export const useUnreadMessagesContext = () => {
+  const {
+    state: { unreadMessages },
+  } = useChatContext();
 
-const reducer = (state: Settings, action: Actions) => {
+  return unreadMessages.length;
+};
+const reducer = (state: Chat, action: Actions) => {
   switch (action.type) {
+    case "ReadAllMessages": {
+      return {
+        ...state,
+        unreadMessages: [],
+      };
+    }
+    case "AddUnreadChatMessage": {
+      return {
+        ...state,
+        unreadMessages: [...state.unreadMessages, action.value],
+        messages: [...state.messages, action.value],
+      };
+    }
     case "AddChatMessage": {
       return {
         ...state,
@@ -59,10 +87,36 @@ const reducer = (state: Settings, action: Actions) => {
 };
 
 export const useChat = () => {
-  const [state, dispatch] = useReducer<Reducer<Settings, Actions>>(
+  const [state, dispatch] = useReducer<Reducer<Chat, Actions>>(
     reducer,
     initialState
   );
 
+  useEffect(() => {
+    // TODO dev helper to add remove chage messages.
+    // @ts-ignore
+    window.setChatMessage = (
+      message: string,
+      author: string,
+      read: boolean
+    ) => {
+      dispatch({
+        type: read ? "AddChatMessage" : "AddUnreadChatMessage",
+        value: {
+          author: author,
+          date: Date.now(),
+          id: Date.now().toString(),
+          text: message,
+        },
+      });
+    };
+
+    // @ts-ignore
+    window.readAllMessages = () => {
+      dispatch({
+        type: "ReadAllMessages",
+      });
+    };
+  });
   return { state, dispatch };
 };
