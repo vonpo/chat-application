@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import { ChatMessage as ChatMessageProps, ChatMessage } from "./ChatMessage";
+import { useUser } from "../user/userContext";
 
 export interface Chat {
   messages: ChatMessage[];
@@ -19,6 +20,7 @@ const mockMessages: ChatMessageProps[] = Array.from(Array(3).keys()).map(
     text: "asdas" + index,
     id: "test" + index,
     author: "test",
+    userId: "anonymous",
     date: Date.now(),
   })
 );
@@ -87,13 +89,14 @@ const reducer = (state: Chat, action: Actions) => {
 };
 
 export const useChat = () => {
+  const { id } = useUser();
   const [state, dispatch] = useReducer<Reducer<Chat, Actions>>(
     reducer,
     initialState
   );
 
   useEffect(() => {
-    // TODO dev helper to add remove chage messages.
+    // TODO dev helper to add remove change messages.
     // @ts-ignore
     window.setChatMessage = (
       message: string,
@@ -103,6 +106,7 @@ export const useChat = () => {
       dispatch({
         type: read ? "AddChatMessage" : "AddUnreadChatMessage",
         value: {
+          userId: id,
           author: author,
           date: Date.now(),
           id: Date.now().toString(),

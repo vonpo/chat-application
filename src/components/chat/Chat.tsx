@@ -18,6 +18,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
+import { useUser } from "../../store/user/userContext";
 interface ChatProps {}
 
 /**
@@ -33,12 +34,14 @@ export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
   author,
   text,
   id,
+  userId,
   date,
 }) => {
+  const user = useUser();
   const { state } = useContext(SettingsContext);
   const dateFormat =
     state.dateFormat === "12HourFormat" ? "h mm:ss a" : "HH mm:ss";
-  const isOwner = state.userName === author;
+  const isOwner = user.id === userId;
 
   return (
     <Grid
@@ -78,6 +81,7 @@ export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
  * @constructor
  */
 export const AddChatMessage: FunctionComponent = ({}) => {
+  const { id } = useUser();
   const { state } = useContext(SettingsContext);
   const { dispatch } = useChatContext();
   const [message, setMessage] = useState("");
@@ -94,6 +98,7 @@ export const AddChatMessage: FunctionComponent = ({}) => {
     dispatch({
       type: "AddChatMessage",
       value: {
+        userId: id,
         author: state.userName,
         date: Date.now(),
         id: Date.now().toString(),

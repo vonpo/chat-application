@@ -75,7 +75,7 @@ export const Settings: FunctionComponent = () => {
   return (
     <Grid container direction="column">
       <FormControl component="fieldset" className={Styles.formControl}>
-        <FormLabel component="legend">User name</FormLabel>
+        <FormLabel component="legend">{t("settingsUsername")}</FormLabel>
         <TextField
           name="userName"
           value={userName}
