@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "webpack-dev-server --open",
+    "start": "webpack-dev-server --open --env.IN_MEMORY_CHAT=true",
+    "start-remote": "webpack-dev-server --open --env.SOCKET_URL=http://localhost:4000 --env.ENDPOINT_URL=http://localhost:4000/graphql",
     "watch": "webpack --watch --config webpack.config.js",
     "build": "webpack --config webpack.config.js"
   },

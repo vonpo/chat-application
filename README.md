@@ -2,15 +2,31 @@
 
 
 ## What is it? 
-Create a single page application based on following mockups: 
-Application should contain 2 pages:
+Single page application that contains following pages/views.
 1. Chat page
 2. Settings page
 
 ## How does it work?
 
+Application has two views:
+- `chat` is main view which has chat messages and control that allows sending messages.
+- `settings` view with user settings.
+
+`chat` - User can view messages in scrolled window when new message arrives scroll is set to bottom.
+Message can be sent by using '>' button or CTRL+Enter when this setting is on.
+
+`settings` - has following user settings:
+
+- `username` user name displayed for other users
+- `interfaceColor` - dark or white app theme
+- `language` - app language
+- `dateFormat` - 12h or 24 hour format
+- `sendOnCTRLandEnter` - send messages on CTRL+ENTER otherwise user need click '>' button to send message. 
+
 ## Setup and run
 
+### Clone repo
+`git clone `
 ### Install
 `npm install`
 
@@ -20,7 +36,6 @@ Application should contain 2 pages:
 ### Run dev app
 `npm start`
 
-
 ### Setup backend endpoint
 // todo
 
@@ -28,9 +43,9 @@ Application should contain 2 pages:
 - [x] You have to use React as your framework;
 - [x] You have to use CSS preprocessors;
 - [x] You have to write the app in TypeScript;
-- [ ] It should work on every desktop and phone, so you have to make responsive
+- [x] It should work on every desktop and phone, so you have to make responsive
 design. And it has to work both portrait and landscape orientation;
-- [ ] It should work on desktop/tablet/phone at least on the following browsers:
+- [x] It should work on desktop/tablet/phone at least on the following browsers:
 Chrome, Firefox and Safari. Consider the latest versions for each browser;
 - [x] Please, do not use any tool like or similar to create-react-app;
 - [x] Write at least some tests that would cover the main functionality of your app.
@@ -40,8 +55,8 @@ We do not expect to be 100% test covered;
 browser;
 - [x] README file that contains:
 - [x] a. What is it;
-- [ ] b. How does it work;
-- [ ] c. How could we setup and run it;
+- [x] b. How does it work;
+- [x] c. How could we setup and run it;
 - [x] d. Create a checkbox list of all the features required by this homework
 and check the ones you were able to accomplish;
 
@@ -57,4 +72,5 @@ When `PageView` is larger than space between `Header` and `Footer` scroll-y is a
 ## Internationalization
 
 For i18n `https://react.i18next.com/` is used.
+
 Translations can be found in `src/18n/index.ts`

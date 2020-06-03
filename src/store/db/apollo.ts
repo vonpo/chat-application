@@ -5,9 +5,13 @@ import gql from "graphql-tag";
 import { ChatMessage, ChatMessageInput } from "../chat/ChatMessage";
 import { IChatActions } from "./chatActions";
 import * as socketIo from "socket.io-client";
+
+declare var SOCKET_URL: string;
+declare var ENDPOINT_URL: string;
+
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: ENDPOINT_URL,
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -61,9 +65,7 @@ const addMessage = async (chatMessage: ChatMessageInput) => {
 };
 
 const subscribe = (onMessageReceived: (chatMessage: ChatMessage) => {}) => {
-  const io = socketIo.connect("http://localhost:4000");
-
-  io.on("connect", (socket: any) => {});
+  const io = socketIo.connect(SOCKET_URL);
 
   io.on("CHAT_MESSAGE_ADDED", (chatMessage: ChatMessage) => {
     onMessageReceived(chatMessage);
