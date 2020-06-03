@@ -26,8 +26,10 @@ Message can be sent by using '>' button or CTRL+Enter when this setting is on.
 ## Setup and run
 
 ### Clone repo
-`git clone `
+`git clone https://github.com/vonpo/chat-application.git`
+
 ### Install
+Open app directory.
 `npm install`
 
 ### Run tests
