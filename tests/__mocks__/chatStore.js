@@ -13,8 +13,8 @@ let context = createContext({
 });
 
 module.exports = {
-  useSettingsContext: () => useContext(context),
-  SettingsContext: context,
+  useChatContext: () => useContext(context),
+  ChatContext: context,
   setupContext: (newState = {}, callback = () => {}) => {
     Object.assign(state, newState);
     dispatchCallback = callback;

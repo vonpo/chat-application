@@ -8,16 +8,40 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { Header } from "./layout/Header";
 import { Footer } from "./layout/Footer";
-import { PageView } from "./layout/PageView";
-import { Chat } from "./chat";
-import { Settings } from "./settings";
+import { ChatPage } from "./chat";
+import { SettingsPage } from "./settings";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { darkTheme, whiteTheme } from "../theme";
 
 import { SettingsContext, useSettings } from "settingsStore";
-import { ChatContext, useChat } from "../store/chat/chatContext";
+import { Index, useChat } from "chatStore";
 import i18n from "i18next";
 import Styles from "./main.module.less";
+
+/**
+ * Component is responsible for displaying main app view.
+ * It wrap components in ChatContext as this context is required by:
+ * - Header
+ * - Footer
+ * - Chat
+ *
+ * @constructor
+ */
+const MainViewComponent: FunctionComponent = () => {
+  const chatContext = useChat();
+
+  return (
+    <Grid direction="column" container className={Styles.mainContainer}>
+      <Index.Provider value={chatContext}>
+        <CssBaseline />
+        <Header />
+        <Route component={ChatPage} path="/" />
+        <Route component={SettingsPage} path="/settings" />
+        <Footer />
+      </Index.Provider>
+    </Grid>
+  );
+};
 
 /**
  * App component consists of main elements of app:
@@ -32,7 +56,6 @@ import Styles from "./main.module.less";
  */
 export const AppComponent: FunctionComponent = () => {
   const settingsContext = useSettings();
-  const chatContext = useChat();
 
   useEffect(() => {
     if (settingsContext.state.language !== i18n.language) {
@@ -55,21 +78,7 @@ export const AppComponent: FunctionComponent = () => {
                       state.isDark ? Styles.darkTheme : Styles.whiteTheme
                     }
                   >
-                    <Grid
-                      direction="column"
-                      container
-                      className={Styles.mainContainer}
-                    >
-                      <ChatContext.Provider value={chatContext}>
-                        <CssBaseline />
-                        <Header />
-                        <PageView>
-                          <Route component={Chat} path="/" exact />
-                          <Route component={Settings} path="/settings" />
-                        </PageView>
-                        <Footer />
-                      </ChatContext.Provider>
-                    </Grid>
+                    <MainViewComponent />
                   </Grid>
                 </BrowserRouter>
               </ThemeProvider>

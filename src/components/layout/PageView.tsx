@@ -3,6 +3,13 @@ import { FunctionComponent } from "react";
 import Styles from "./layout.module.less";
 import Paper from "@material-ui/core/Paper";
 
-export const PageView: FunctionComponent = ({ children }) => {
-  return <Paper className={Styles.pageView}>{children}</Paper>;
+export const PageView: FunctionComponent<{ hide?: boolean }> = ({
+  hide,
+  children,
+}) => {
+  return (
+    <Paper className={hide ? Styles.pageViewHide : Styles.pageView}>
+      {children}
+    </Paper>
+  );
 };

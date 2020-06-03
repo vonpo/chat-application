@@ -14,12 +14,17 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Styles from "./settings.module.less";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { PageView } from "../layout/PageView";
 
 export const ResetSettings: FunctionComponent = () => {
   const { dispatch } = useSettingsContext();
   const onReset = () => dispatch({ type: "ResetSettings" });
 
-  return <Button onClick={onReset}>Reset</Button>;
+  return (
+    <Button onClick={onReset} fullWidth>
+      Reset
+    </Button>
+  );
 };
 
 export const Settings: FunctionComponent = () => {
@@ -162,5 +167,13 @@ export const Settings: FunctionComponent = () => {
         </RadioGroup>
       </FormControl>
     </Grid>
+  );
+};
+
+export const SettingsPage: FunctionComponent = () => {
+  return (
+    <PageView>
+      <Settings />
+    </PageView>
   );
 };

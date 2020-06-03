@@ -19,6 +19,7 @@ module.exports = {
   resolve: {
     alias: {
       settingsStore: path.resolve(__dirname, "src/store/settings"),
+      chatStore: path.resolve(__dirname, "src/store/chat")
     },
     extensions: [".tsx", ".ts", ".js", ".css", ".less"],
   },

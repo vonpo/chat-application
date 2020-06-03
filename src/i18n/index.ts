@@ -29,6 +29,7 @@ i18n
       en: {
         translation: {
           chat: "Chat",
+          chatMessage: "Type message here...",
           settings: "Settings",
           settingsUsername: "User name",
           settingThemeDark: "Dark",
@@ -51,6 +52,7 @@ i18n
       de: {
         translation: {
           chat: "DE: Chat",
+          chatMessage: "DE: Type message here...",
           settings: "DE: Settings",
           settingsUsername: "DE: Username",
           settingThemeDark: "DE: Dark",
@@ -73,6 +75,7 @@ i18n
       pl: {
         translation: {
           chat: "Czat",
+          chatMessage: "Wpisz wiadomość...",
           settings: "Ustawienia",
           settingsUsername: "Nazwa na czacie",
           settingThemeDark: "Ciemny",

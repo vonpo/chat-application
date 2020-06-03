@@ -2,16 +2,15 @@ import * as React from "react";
 import {
   FunctionComponent,
   KeyboardEvent,
-  useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { SettingsContext, useSettingsContext } from "settingsStore";
-import { useChatContext } from "../../store/chat/chatContext";
+import { SettingState, useSettingsContext } from "settingsStore";
+import { useChatContext } from "chatStore";
 import { format } from "date-fns";
 import { ChatMessage as ChatMessageProps } from "../../store/chat/ChatMessage";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Styles from "./chat.module.less";
 import Grid from "@material-ui/core/Grid";
@@ -19,40 +18,39 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
 import { useUser } from "../../store/user/userContext";
+import SendIcon from "@material-ui/icons/Send";
+import Box from "@material-ui/core/Box";
+import { useTranslation } from "react-i18next";
+import { useDetectPath } from "../../route/useDetectPath";
+import { PageView } from "../layout/PageView";
 
 /**
  * Display chat message.
  *
- * @param {string} author
- * @param {string} text
- * @param {string} id
- * @param {string} userId
- * @param {number} date
+ * @param message
+ * @param userId
+ * @param settings
  * @constructor
  */
-export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
-  author,
-  text,
-  id,
-  userId,
-  date,
-}) => {
-  const user = useUser();
-  const { state } = useContext(SettingsContext);
+export const ChatMessage: FunctionComponent<{
+  message: ChatMessageProps;
+  settings: SettingState;
+  userId: string;
+}> = ({ message, userId, settings }) => {
   const dateFormat =
-    state.dateFormat === "12HourFormat" ? "h mm:ss a" : "HH mm:ss";
-  const isOwner = user.id === userId;
+    settings.dateFormat === "12HourFormat" ? "h:mm a" : "HH:mm";
+  const isOwner = message.userId === userId;
 
   return (
     <Grid
-      key={id}
+      key={message.id}
       container
       className={Styles.chatMessage}
       direction="column"
       alignItems={isOwner ? "flex-end" : "flex-start"}
     >
       <Typography variant="caption">
-        {format(new Date(date), dateFormat)}
+        {format(new Date(message.date), dateFormat)}
       </Typography>
       <Grid
         container
@@ -61,12 +59,12 @@ export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
         justify={isOwner ? "flex-end" : "flex-start"}
       >
         {!isOwner && (
-          <Avatar title={author} className={Styles.avatar}>
-            {author ? author[0].toUpperCase() : "?"}
+          <Avatar title={message.author} className={Styles.avatar}>
+            {message.author ? message.author[0].toUpperCase() : "?"}
           </Avatar>
         )}
         <Paper className={Styles.message}>
-          <pre className={Styles.messageText}>{text}</pre>
+          <pre className={Styles.messageText}>{message.text}</pre>
         </Paper>
       </Grid>
     </Grid>
@@ -81,6 +79,7 @@ export const ChatMessage: FunctionComponent<ChatMessageProps> = ({
  * @constructor
  */
 export const AddChatMessage: FunctionComponent = ({}) => {
+  const { t } = useTranslation();
   const { id } = useUser();
   const { state } = useSettingsContext();
   const { sendMessage } = useChatContext();
@@ -100,16 +99,6 @@ export const AddChatMessage: FunctionComponent = ({}) => {
       author: state.userName,
       text: message,
     });
-    // dispatch({
-    //   type: "AddChatMessage",
-    //   value: {
-    //     userId: id,
-    //     author: state.userName,
-    //     date: Date.now(),
-    //     id: Date.now().toString(),
-    //     text: message,
-    //   },
-    // });
     setMessage("");
   };
 
@@ -124,14 +113,20 @@ export const AddChatMessage: FunctionComponent = ({}) => {
 
   return (
     <>
-      <TextField
-        label="message"
-        value={message}
-        multiline
-        onChange={onTextChange}
-        onKeyDown={handleSubmit}
-      />
-      <Button onClick={addMessage}>Add message</Button>
+      <Box flexGrow={1} className={Styles.inputMessage}>
+        <TextField
+          fullWidth
+          label={t("chatMessage")}
+          value={message}
+          multiline
+          rowsMax={4}
+          onChange={onTextChange}
+          onKeyDown={handleSubmit}
+        />
+      </Box>
+      <IconButton onClick={addMessage}>
+        <SendIcon />
+      </IconButton>
     </>
   );
 };
@@ -143,19 +138,32 @@ export const AddChatMessage: FunctionComponent = ({}) => {
  *
  * @constructor
  */
-export const ChatMessages: FunctionComponent = ({}) => {
-  const {
-    state: { messages },
-  } = useChatContext();
-
+export const ChatMessages: FunctionComponent<{
+  messages: ChatMessageProps[];
+  settings: SettingState;
+  userId: string;
+}> = ({ messages, settings, userId }) => {
   return (
     <>
-      {messages.map((app, index) => (
-        <ChatMessage {...app} key={index + "key"} />
+      {messages.map((message) => (
+        <ChatMessage
+          message={message}
+          settings={settings}
+          userId={userId}
+          key={message.id}
+        />
       ))}
     </>
   );
 };
+
+/**
+ * This might be overkill but it show conception to keep messages memoized.
+ * As this is main view and if user goes to other page we don't want to remove this component but just hide it.
+ *
+ * As we don't re-render element it solves issue with scrolling as it keeps current scroll position when we change view.
+ */
+const MemoizedChatMessages = React.memo(ChatMessages);
 
 /**
  * Chat component.
@@ -166,6 +174,8 @@ export const ChatMessages: FunctionComponent = ({}) => {
  * @constructor
  */
 export const Chat: FunctionComponent = () => {
+  const user = useUser();
+  const settings = useSettingsContext();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const {
     state: { messages },
@@ -176,10 +186,29 @@ export const Chat: FunctionComponent = () => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
   return (
     <div>
-      <ChatMessages />
-      <div ref={messagesEndRef} id="end" />
+      <MemoizedChatMessages
+        messages={messages}
+        userId={user.id}
+        settings={settings.state}
+      />
+      <div ref={messagesEndRef} />
     </div>
+  );
+};
+
+/**
+ * Page view for chat tab.
+ * @constructor
+ */
+export const ChatPage: FunctionComponent = () => {
+  const isMainTab = useDetectPath("/");
+
+  return (
+    <PageView hide={!isMainTab}>
+      <Chat />
+    </PageView>
   );
 };

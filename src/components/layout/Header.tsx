@@ -2,10 +2,7 @@ import * as React from "react";
 import { FunctionComponent, useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import { useTranslation } from "react-i18next";
-import {
-  useUnreadMessagesContext,
-  useChatContext,
-} from "../../store/chat/chatContext";
+import { useUnreadMessagesContext, useChatContext } from "chatStore";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { useHistory } from "react-router-dom";

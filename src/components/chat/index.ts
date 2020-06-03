@@ -1,1 +1,7 @@
-export { Chat, ChatMessage, ChatMessages, AddChatMessage } from "./Chat";
+export {
+  Chat,
+  ChatPage,
+  ChatMessage,
+  ChatMessages,
+  AddChatMessage,
+} from "./Chat";

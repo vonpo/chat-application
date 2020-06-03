@@ -1,1 +1,1 @@
-export { Settings, ResetSettings } from "./Settings";
+export { Settings, SettingsPage, ResetSettings } from "./Settings";

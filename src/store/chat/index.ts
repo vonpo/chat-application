@@ -6,28 +6,20 @@ import {
   Dispatch,
   useContext,
   useEffect,
+  useRef,
 } from "react";
 import { ChatMessage, ChatMessageInput } from "./ChatMessage";
 import { useUser } from "../user/userContext";
 import { ChatActions } from "../db";
+import { useDetectPath } from "../../route/useDetectPath";
 
 export interface Chat {
   messages: ChatMessage[];
   unreadMessages: ChatMessage[];
 }
 
-const mockMessages: ChatMessage[] = Array.from(Array(3).keys()).map(
-  (e, index) => ({
-    text: "asdas" + index,
-    id: "test" + index,
-    author: "test",
-    userId: "anonymous",
-    date: Date.now(),
-  })
-);
-
 const initialState: Chat = {
-  messages: mockMessages,
+  messages: [],
   unreadMessages: [],
 };
 
@@ -56,7 +48,7 @@ type Actions =
   | AddUnreadChatMessage
   | SetMessages;
 
-export const ChatContext = createContext<{
+export const Index = createContext<{
   state: Chat;
   dispatch: Dispatch<Actions>;
   sendMessage(
@@ -68,7 +60,7 @@ export const ChatContext = createContext<{
   sendMessage: () => null,
 });
 
-export const useChatContext = () => useContext(ChatContext);
+export const useChatContext = () => useContext(Index);
 export const useUnreadMessagesContext = () => {
   const {
     state: { unreadMessages },
@@ -110,6 +102,10 @@ const reducer = (state: Chat, action: Actions) => {
 
 export const useChat = () => {
   const { id } = useUser();
+  const isChatTab = useDetectPath("/");
+  const chatTabRef = useRef<boolean>(isChatTab);
+
+  chatTabRef.current = isChatTab;
 
   /**
    * Send chat message.
@@ -126,39 +122,23 @@ export const useChat = () => {
 
   // Load remote messages.
   useEffect(() => {
+    const unsubscribe = ChatActions.subscribe((chatMessage) => {
+      if (id === chatMessage.userId || chatTabRef.current) {
+        dispatch({ type: "AddChatMessage", value: chatMessage });
+        return;
+      }
+
+      dispatch({ type: "AddUnreadChatMessage", value: chatMessage });
+    });
+
     (async () => {
       const messages = await ChatActions.getMessages();
 
       dispatch({ type: "SetMessages", value: messages });
     })();
+
+    return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    // TODO dev helper to add remove change messages.
-    // @ts-ignore
-    window.setChatMessage = (
-      message: string,
-      author: string,
-      read: boolean
-    ) => {
-      dispatch({
-        type: read ? "AddChatMessage" : "AddUnreadChatMessage",
-        value: {
-          userId: id,
-          author: author,
-          date: Date.now(),
-          id: Date.now().toString(),
-          text: message,
-        },
-      });
-    };
-
-    // @ts-ignore
-    window.readAllMessages = () => {
-      dispatch({
-        type: "ReadAllMessages",
-      });
-    };
-  });
   return { state, dispatch, sendMessage };
 };
