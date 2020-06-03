@@ -33,10 +33,13 @@ Open app directory.
 `npm install`
 
 ### Run tests
-`npm run tests`
+`npm run test`
 
 ### Run dev app
 `npm start`
+
+### Run build app
+`npm run build`
 
 ### Setup backend endpoint
 // todo
