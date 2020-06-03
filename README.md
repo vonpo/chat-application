@@ -37,6 +37,13 @@ Open app directory.
 
 ### Run dev app
 `npm start`
+By default it uses:
+`env.IN_MEMORY_CHAT=true` env variable which setup fake in memory chat server
+if you want to run real chat server you need to setup:
+`https://github.com/vonpo/chat-application-backend`
+
+And set -> 
+`--env.SOCKET_URL=http://${YOUR_SERVER_URL} --env.ENDPOINT_URL=http://${YOUR_SERVER_URL}`
 
 ### Run build app
 `npm run build`
