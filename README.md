@@ -6,6 +6,9 @@ Single page application that contains following pages/views.
 1. Chat page
 2. Settings page
 
+## Demo
+`http://104.248.41.129:4000/`
+
 ## How does it work?
 
 Application has two views:
