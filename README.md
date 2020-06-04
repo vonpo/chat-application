@@ -38,9 +38,17 @@ Open app directory.
 ### Run dev app
 `npm start`
 By default it uses:
-`env.IN_MEMORY_CHAT=true` env variable which setup fake in memory chat server
-if you want to run real chat server you need to setup:
+`env.IN_MEMORY_CHAT=true` env variable which setup fake in memory chat server.
+
+If you want to run your own chat server you can setup this one:
 `https://github.com/vonpo/chat-application-backend`
+
+## Run dev remote app:
+`npm start start-remote`
+
+Update those parameters if you have your own backend setup:
+
+`--env.SOCKET_URL=http://104.248.41.129:4000 --env.ENDPOINT_URL=http://104.248.41.129:4000/graphql`
 
 And set -> 
 `--env.SOCKET_URL=http://${YOUR_SERVER_URL} --env.ENDPOINT_URL=http://${YOUR_SERVER_URL}`
@@ -49,7 +57,7 @@ And set ->
 `npm run build`
 
 ### Setup backend endpoint
-// todo
+`https://github.com/vonpo/chat-application-backend`
 
 ## What has been done?
 - [x] You have to use React as your framework;
