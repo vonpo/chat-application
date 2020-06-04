@@ -4,7 +4,7 @@ export const whiteTheme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        backgroundColor: "#ffffffe3",
+        backgroundColor: "rgba(255, 255, 255, 0.89)",
       },
     },
   },
@@ -13,7 +13,7 @@ export const darkTheme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        backgroundColor: "#424242de",
+        backgroundColor: "rgba(66, 66, 66, 0.87);",
       },
     },
   },

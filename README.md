@@ -63,6 +63,15 @@ And set ->
 ### Setup backend endpoint
 `https://github.com/vonpo/chat-application-backend`
 
+
+## Testing
+Tested on:
+- Edge 
+- Chrome (Windows/Ubuntu/Android)
+- Firefox (Windows/Ubuntu)
+
+Not tested on Apple devices. (don't have one)
+
 ## What has been done?
 - [x] You have to use React as your framework;
 - [x] You have to use CSS preprocessors;
@@ -83,6 +92,11 @@ browser;
 - [x] c. How could we setup and run it;
 - [x] d. Create a checkbox list of all the features required by this homework
 and check the ones you were able to accomplish;
+
+## What has NOT been done.
+- [ ] Support for losing internet connection. Ie when user dropped internet connection new messeges won't be pulled.
+To get all message user needs to refresh page.
+- [ ] Pagnination to messages. Currently all messages are being fetched. Would be nice to get X last messages and load older messages when user scrolls up.
 
 ## App layout
 App layout set in `main.tsx` file.
