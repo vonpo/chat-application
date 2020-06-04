@@ -27,16 +27,22 @@ export const ResetSettings: FunctionComponent = () => {
   );
 };
 
-type Action = {
-  name: "ChangeState";
-  value: object;
+type ChangeState = {
+  readonly name: "ChangeState";
+  readonly value: object;
 };
+
+type SetPristine = {
+  readonly name: "SetPristine";
+};
+
+type Actions = ChangeState | SetPristine;
 
 interface FromState extends SettingState {
   isDirty?: boolean;
 }
 
-const reducer = (state: FromState, action: Action) => {
+const reducer = (state: FromState, action: Actions) => {
   switch (action.name) {
     case "ChangeState":
       return {
@@ -44,6 +50,12 @@ const reducer = (state: FromState, action: Action) => {
         ...action.value,
         isDirty: true,
       };
+    case "SetPristine": {
+      return {
+        ...state,
+        isDirty: false,
+      };
+    }
   }
 
   return state;
@@ -51,7 +63,7 @@ const reducer = (state: FromState, action: Action) => {
 export const Settings: FunctionComponent = () => {
   const { t } = useTranslation();
   const { state, dispatch } = useSettingsContext();
-  const [formState, formDispatch] = useReducer<Reducer<FromState, Action>>(
+  const [formState, formDispatch] = useReducer<Reducer<FromState, Actions>>(
     reducer,
     state
   );
@@ -108,6 +120,10 @@ export const Settings: FunctionComponent = () => {
         ...formState,
         isDirty: undefined,
       },
+    });
+
+    formDispatch({
+      name: "SetPristine",
     });
   };
 
