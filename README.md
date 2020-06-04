@@ -9,6 +9,9 @@ Single page application that contains following pages/views.
 ## Demo
 `http://104.248.41.129:4000/`
 
+![Light theme](https://raw.githubusercontent.com/vonpo/chat-application/master/spec/2020-06-04_20h51_51.png)
+![Dark theme](https://raw.githubusercontent.com/vonpo/chat-application/master/spec/2020-06-04_20h51_59.png)
+
 ## How does it work?
 
 Application has two views:
