@@ -12,10 +12,10 @@ Application has two views:
 - `chat` is main view which has chat messages and control that allows sending messages.
 - `settings` view with user settings.
 
-`chat` - User can view messages in scrolled window when new message arrives scroll is set to bottom.
-Message can be sent by using '>' button or CTRL+Enter when this setting is on.
+`chat` view - User can view messages in scroll-able window. When new message arrives scroll is set to bottom.
+Message can be sent by '>' button or CTRL+Enter when this setting is turned on.
 
-`settings` - has following user settings:
+`settings` view - has following user settings:
 
 - `username` user name displayed for other users
 - `interfaceColor` - dark or white app theme
@@ -23,13 +23,15 @@ Message can be sent by using '>' button or CTRL+Enter when this setting is on.
 - `dateFormat` - 12h or 24 hour format
 - `sendOnCTRLandEnter` - send messages on CTRL+ENTER otherwise user need click '>' button to send message. 
 
+To save settings user clicks `Save`. By default this button is disabled if user changes any of setting is turned on.
+
 ## Setup and run
 
 ### Clone repo
 `git clone https://github.com/vonpo/chat-application.git`
 
 ### Install
-Open app directory.
+CD app directory.
 `npm install`
 
 ### Run tests
@@ -37,14 +39,16 @@ Open app directory.
 
 ### Run dev app
 `npm start`
-By default it uses:
-`env.IN_MEMORY_CHAT=true` env variable which setup fake in memory chat server.
 
-If you want to run your own chat server you can setup this one:
+#### Paramters
+By default it uses:
+`env.IN_MEMORY_CHAT=true` env variable which setup fake in-memory-chat server.
+
+If you want to run your own chat server you need to setup this one:
 `https://github.com/vonpo/chat-application-backend`
 
 ## Run dev remote app:
-`npm start start-remote`
+`npm start start-remote` - this connects to `http://104.248.41.129:4000` 
 
 Update those parameters if you have your own backend setup:
 
