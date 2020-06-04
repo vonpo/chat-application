@@ -1,9 +1,19 @@
 import { createContext, Dispatch, useContext } from "react";
-import { Actions } from "./actions";
 import * as React from "react";
 import { useReducer } from "react";
 import defaultLanguage from "../../i18n/defaultLanguage";
 import { setItem, getItem } from "../../storage/local";
+
+type SetSettings = {
+  readonly type: "SetSettings";
+  readonly value: {};
+};
+
+type ResetSettings = {
+  readonly type: "ResetSettings";
+};
+
+export type Actions = SetSettings | ResetSettings;
 
 export interface SettingState {
   isDark: boolean;
@@ -25,18 +35,8 @@ export const initialState = localSettings || getDefaultSettings();
 
 const reducer = (state: SettingState, action: Actions) => {
   switch (action.type) {
-    case "SetDarkTheme":
-      return { ...state, isDark: true };
-    case "SetWhiteTheme":
-      return { ...state, isDark: false };
-    case "ChangeLanguage":
-      return { ...state, language: action.value };
-    case "ChangeDateFormat":
-      return { ...state, dateFormat: action.value };
-    case "ChangeSendType":
-      return { ...state, sendOnCtrlEnter: action.value };
-    case "SetUser":
-      return { ...state, userName: action.value };
+    case "SetSettings":
+      return { ...state, ...action.value };
     case "ResetSettings":
       return getDefaultSettings();
     default:

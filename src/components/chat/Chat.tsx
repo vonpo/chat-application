@@ -23,7 +23,7 @@ import Box from "@material-ui/core/Box";
 import { useTranslation } from "react-i18next";
 import { useDetectPath } from "../../route/useDetectPath";
 import { PageView } from "../layout/PageView";
-
+import Tooltip from "@material-ui/core/Tooltip";
 /**
  * Display chat message.
  *
@@ -59,9 +59,11 @@ export const ChatMessage: FunctionComponent<{
         justify={isOwner ? "flex-end" : "flex-start"}
       >
         {!isOwner && (
-          <Avatar title={message.author} className={Styles.avatar}>
-            {message.author ? message.author[0].toUpperCase() : "?"}
-          </Avatar>
+          <Tooltip title={message.author} placement="top-end">
+            <Avatar className={Styles.avatar}>
+              {message.author ? message.author[0].toUpperCase() : "?"}
+            </Avatar>
+          </Tooltip>
         )}
         <Paper className={Styles.message}>
           <pre className={Styles.messageText}>{message.text}</pre>

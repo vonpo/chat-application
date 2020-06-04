@@ -1,6 +1,6 @@
 import * as React from "react";
-import { FunctionComponent, useEffect, useState } from "react";
-import { useSettingsContext } from "settingsStore";
+import { FunctionComponent, Reducer, useReducer } from "react";
+import { SettingState, useSettingsContext } from "settingsStore";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -27,51 +27,87 @@ export const ResetSettings: FunctionComponent = () => {
   );
 };
 
+type Action = {
+  name: "ChangeState";
+  value: object;
+};
+
+interface FromState extends SettingState {
+  isDirty?: boolean;
+}
+
+const reducer = (state: FromState, action: Action) => {
+  switch (action.name) {
+    case "ChangeState":
+      return {
+        ...state,
+        ...action.value,
+        isDirty: true,
+      };
+  }
+
+  return state;
+};
 export const Settings: FunctionComponent = () => {
   const { t } = useTranslation();
   const { state, dispatch } = useSettingsContext();
-  const [userName, setUsername] = useState(state.userName);
-
-  useEffect(() => {
-    setUsername(state.userName);
-  }, [state.userName]);
+  const [formState, formDispatch] = useReducer<Reducer<FromState, Action>>(
+    reducer,
+    state
+  );
 
   const handleInterfaceColorChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const actionType =
-      event.target.value === "light" ? "SetWhiteTheme" : "SetDarkTheme";
-    dispatch({ type: actionType });
+    formDispatch({
+      name: "ChangeState",
+      value: { isDark: event.target.value === "dark" },
+    });
   };
 
   const changeLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const language = event.target.value;
 
-    i18n.changeLanguage(language);
-    dispatch({ type: "ChangeLanguage", value: language });
+    formDispatch({
+      name: "ChangeState",
+      value: { language },
+    });
   };
 
   const handleDateFormatChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    dispatch({ type: "ChangeDateFormat", value: event.target.value });
+    formDispatch({
+      name: "ChangeState",
+      value: { dateFormat: event.target.value },
+    });
   };
 
   const handleSendTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "ChangeSendType",
-      value: event.target.value === "sendOnCtrlEnter",
+    formDispatch({
+      name: "ChangeState",
+      value: { sendOnCtrlEnter: event.target.value === "sendOnCtrlEnter" },
     });
   };
 
   const onUserTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+    formDispatch({
+      name: "ChangeState",
+      value: { userName: event.target.value },
+    });
   };
 
-  const onUserFieldBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const saveHandler = () => {
+    if (formState.language !== state.language) {
+      i18n.changeLanguage(formState.language);
+    }
+
     dispatch({
-      type: "SetUser",
-      value: event.target.value,
+      type: "SetSettings",
+      value: {
+        ...formState,
+        isDirty: undefined,
+      },
     });
   };
 
@@ -81,9 +117,8 @@ export const Settings: FunctionComponent = () => {
         <FormLabel component="legend">{t("settingsUsername")}</FormLabel>
         <TextField
           name="userName"
-          value={userName}
+          value={formState.userName}
           onChange={onUserTextChange}
-          onBlur={onUserFieldBlur}
         />
       </FormControl>
       <FormControl component="fieldset" className={Styles.formControl}>
@@ -92,7 +127,7 @@ export const Settings: FunctionComponent = () => {
           className={Styles.formGroup}
           aria-label="interfaceColor"
           name="interfaceColor"
-          value={state.isDark ? "dark" : "light"}
+          value={formState.isDark ? "dark" : "light"}
           onChange={handleInterfaceColorChange}
         >
           <FormControlLabel
@@ -114,7 +149,7 @@ export const Settings: FunctionComponent = () => {
         <Select
           labelId="change-language-label"
           id="change-language-select"
-          value={state.language}
+          value={formState.language}
           onChange={changeLanguage}
         >
           <MenuItem value="en">{t("settingLanguageEN")}</MenuItem>
@@ -128,7 +163,7 @@ export const Settings: FunctionComponent = () => {
           aria-label="dateFormat"
           className={Styles.formGroup}
           name="dateFormat"
-          value={state.dateFormat}
+          value={formState.dateFormat}
           onChange={handleDateFormatChange}
         >
           <FormControlLabel
@@ -150,7 +185,9 @@ export const Settings: FunctionComponent = () => {
           aria-label="sendType"
           name="sendType"
           value={
-            state.sendOnCtrlEnter ? "sendOnCtrlEnter" : "sendOnCtrlEnterFalse"
+            formState.sendOnCtrlEnter
+              ? "sendOnCtrlEnter"
+              : "sendOnCtrlEnterFalse"
           }
           onChange={handleSendTypeChange}
         >
@@ -166,6 +203,16 @@ export const Settings: FunctionComponent = () => {
           />
         </RadioGroup>
       </FormControl>
+      <Grid item>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={saveHandler}
+          disabled={!formState.isDirty}
+        >
+          {t("settingsSave")}
+        </Button>
+      </Grid>
     </Grid>
   );
 };
