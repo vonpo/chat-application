@@ -101,7 +101,7 @@ and check the ones you were able to accomplish;
 Optional:
 - [x] Smiles support
 - [x] Unread messages count in the chat tab
-- Link parser
+- [ ] Link parser
 - [ ] YouTube link (embedded video should appear);
 - [ ] Link to an image (embedded image should appear);
 

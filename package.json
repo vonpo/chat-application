@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "prettier": "prettier --write src/**/*.{ts,tsx}",
     "test": "jest",
     "start": "webpack-dev-server --open --env.IN_MEMORY_CHAT=true",
     "start-remote": "webpack-dev-server --open --env.SOCKET_URL=http://104.248.41.129:4000 --env.ENDPOINT_URL=http://104.248.41.129:4000/graphql",
