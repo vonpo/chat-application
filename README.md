@@ -43,15 +43,18 @@ CD app directory.
 ### Run dev app
 `npm start`
 
-#### Paramters
-By default it uses:
-`env.IN_MEMORY_CHAT=true` env variable which setup fake in-memory-chat server.
+#### env parameters:
+`env.IN_MEMORY_CHAT` env variable which indicates whether set fake in-memory-chat server.
+
+`env.SOCKET_URL` - socket connection endpoint
+
+`env.ENDPOINT_URL` - graphQL endpoint connection
 
 If you want to run your own chat server you need to setup this one:
 `https://github.com/vonpo/chat-application-backend`
 
 ## Run dev remote app:
-`npm start start-remote` - this connects to `http://104.248.41.129:4000` 
+`npm run start-remote` - this connects to `http://104.248.41.129:4000` 
 
 Update those parameters if you have your own backend setup:
 
@@ -65,7 +68,6 @@ And set ->
 
 ### Setup backend endpoint
 `https://github.com/vonpo/chat-application-backend`
-
 
 ## Testing
 Tested on:
@@ -95,6 +97,14 @@ browser;
 - [x] c. How could we setup and run it;
 - [x] d. Create a checkbox list of all the features required by this homework
 and check the ones you were able to accomplish;
+
+Optional:
+- [x] Smiles support
+- [x] Unread messages count in the chat tab
+- Link parser
+- [ ] YouTube link (embedded video should appear);
+- [ ] Link to an image (embedded image should appear);
+
 
 ## What has NOT been done.
 - [ ] Support for losing internet connection. Ie when user dropped internet connection new messeges won't be pulled.

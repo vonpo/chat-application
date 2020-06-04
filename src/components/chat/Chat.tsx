@@ -19,11 +19,37 @@ import Paper from "@material-ui/core/Paper";
 import Avatar from "@material-ui/core/Avatar";
 import { useUser } from "../../store/user/userContext";
 import SendIcon from "@material-ui/icons/Send";
+import EmojiIcon from "@material-ui/icons/EmojiEmotions";
 import Box from "@material-ui/core/Box";
 import { useTranslation } from "react-i18next";
 import { useDetectPath } from "../../route/useDetectPath";
 import { PageView } from "../layout/PageView";
 import Tooltip from "@material-ui/core/Tooltip";
+import Popover from "@material-ui/core/Popover";
+
+const emojis = [
+  "🤠",
+  "😀",
+  "🤐",
+  "😄",
+  "😁",
+  "😆",
+  "🥶",
+  "😅",
+  "🤣",
+  "😂",
+  "🙂",
+  "🥵",
+  "🙃",
+  "😉",
+  "😊",
+  "😇",
+  "🥰",
+  "🤩",
+  "🤑",
+  "🙄",
+];
+
 /**
  * Display chat message.
  *
@@ -74,13 +100,68 @@ export const ChatMessage: FunctionComponent<{
 };
 
 /**
+ * Add emoji messages.
+ *
+ * @param {function} onChange
+ *
+ * @constructor
+ */
+export const AddEmoji: FunctionComponent<{
+  onChange: (emoji: string) => any;
+}> = ({ onChange }) => {
+  const [openPopover, setPopover] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    setPopover(true);
+  };
+
+  const handleEmojiClick = (emoji: string) => {
+    onChange(emoji);
+  };
+
+  return (
+    <>
+      <Popover
+        open={openPopover}
+        anchorEl={anchorEl}
+        onClose={() => setPopover(false)}
+        transformOrigin={{
+          vertical: 220,
+          horizontal: "center",
+        }}
+      >
+        <Grid container style={{ maxWidth: 300 }}>
+          {emojis.map((emoji, index) => {
+            return (
+              <IconButton
+                key={`emoji${index}`}
+                onClick={() => handleEmojiClick(emoji)}
+              >
+                {emoji}
+              </IconButton>
+            );
+          })}
+        </Grid>
+      </Popover>
+      <IconButton onClick={handleClick}>
+        <EmojiIcon />
+      </IconButton>
+    </>
+  );
+};
+
+/**
  * Chat message button.
  *
  * Responsible for adding new chat message.
  *
  * @constructor
  */
-export const AddChatMessage: FunctionComponent = ({}) => {
+export const AddChatMessage: FunctionComponent = () => {
   const { t } = useTranslation();
   const { id } = useUser();
   const { state } = useSettingsContext();
@@ -113,6 +194,10 @@ export const AddChatMessage: FunctionComponent = ({}) => {
     }
   };
 
+  const onEmojiChange = (emoji: string) => {
+    setMessage(message + emoji);
+  };
+
   return (
     <>
       <Box flexGrow={1} className={Styles.inputMessage}>
@@ -126,6 +211,7 @@ export const AddChatMessage: FunctionComponent = ({}) => {
           onKeyDown={handleSubmit}
         />
       </Box>
+      <AddEmoji onChange={onEmojiChange} />
       <IconButton onClick={addMessage}>
         <SendIcon />
       </IconButton>
