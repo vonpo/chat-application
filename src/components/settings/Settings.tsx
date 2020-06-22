@@ -19,10 +19,11 @@ import { PageView } from "../layout/PageView";
 export const ResetSettings: FunctionComponent = () => {
   const { dispatch } = useSettingsContext();
   const onReset = () => dispatch({ type: "ResetSettings" });
+  const { t } = useTranslation();
 
   return (
     <Button onClick={onReset} fullWidth>
-      Reset
+      {t("reset")}
     </Button>
   );
 };

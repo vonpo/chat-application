@@ -28,6 +28,7 @@ i18n
     resources: {
       en: {
         translation: {
+          reset: "Reset",
           chat: "Chat",
           chatMessage: "Type message here...",
           settings: "Settings",
@@ -50,6 +51,7 @@ i18n
       },
       de: {
         translation: {
+          reset: "Reset",
           chat: "Plaudern",
           chatMessage: "Nachricht hier eingeben ...",
           settings: "Die Einstellungen",
@@ -72,6 +74,7 @@ i18n
       },
       pl: {
         translation: {
+          reset: "Resetuj",
           chat: "Czat",
           chatMessage: "Wpisz wiadomość...",
           settings: "Ustawienia",
